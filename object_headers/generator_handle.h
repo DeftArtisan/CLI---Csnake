@@ -21,14 +21,14 @@ typedef struct _GNR_D{
 }_GNR_D;
 
 extern uint32_t __attribute__((no_inline)) _util_gener(struct _GNR_D* _genr, const uint32_t seed) {
-                 _genr->seed_recep = seed;
-	         _genr->seed_recep += 0xe120fc15;
-		 _genr->tmp_recep = (uint64_t)_genr->seed_recep * 0x4a39b70d;
-		 _genr->m1_tm = (_genr->tmp_recep >> 32) ^ _genr->seed_recep;
-		 _genr->tmp_recep = (uint64_t) _genr->m1_tm * 0x12fad5c9;
-		 _genr->m2_tm = (_genr->tmp_recep >> 32) ^ _genr->tmp_recep;
+         _genr->seed_recep = seed;
+         _genr->seed_recep += 0xe120fc15;
+         _genr->tmp_recep = (uint64_t)_genr->seed_recep * 0x4a39b70d;
+         _genr->m1_tm = (_genr->tmp_recep >> 32) ^ _genr->seed_recep;
+         _genr->tmp_recep = (uint64_t) _genr->m1_tm * 0x12fad5c9;
+         _genr->m2_tm = (_genr->tmp_recep >> 32) ^ _genr->tmp_recep;
 		 
-		 return _genr->m2_tm;
+        return _genr->m2_tm;
 }
 
 extern _ptr_int32 _handler_gen(struct _GNR_D* _genr, const char16 _grid[45][40], const struct _MOVEABLE_* _trg_obj) {
