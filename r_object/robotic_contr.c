@@ -34,7 +34,7 @@ extern void __attribute__((no_inline)) _nav_rb_handle(struct _RBT_CTR_* _RBT_CTR
 				//dw-left
                                if(!(*(*(_RBT_CTR->_coord_tgbl + 1) + 1) < 4)) {
 					     //fprintf(stderr, "inaccessible");
-							 //replace the experimentative arguments for generic
+							 //replace the dummy arguments for generic
 			             while(!(*(*(_RBT_CTR->_coord_tgbl + 1) + 1) != 4) && !(_grid[7][4] != '*')) { 
 						_bool_ _dissector = false;
 
