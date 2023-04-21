@@ -5,8 +5,8 @@
 
 
 extern uint32_t __attribute__((no_inline)) _util_gener(struct _GNR_D* _genr, const uint32_t seed) {
-     _genr->seed_recep = seed;
-	   _genr->seed_recep += 0xe120fc15;
+                 _genr->seed_recep = seed;
+	         _genr->seed_recep += 0xe120fc15;
 		 _genr->tmp_recep = (uint64_t)_genr->seed_recep * 0x4a39b70d;
 		 _genr->m1_tm = (_genr->tmp_recep >> 32) ^ _genr->seed_recep;
 		 _genr->tmp_recep = (uint64_t) _genr->m1_tm * 0x12fad5c9;
