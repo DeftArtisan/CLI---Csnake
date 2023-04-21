@@ -22,7 +22,7 @@ extern uint32_t* _handler_gen(struct _GNR_D* _genr, const char16 _grid[45][40], 
 	 _bool_ _dissective_ = false;
 	 _dissective_ = *(*(_trg_obj->_coord + 0) + 1) > *(*(_trg_obj->_coord + 1) + 1) ? 
 		                               !(*(_contr_r + 1) > (uint32_t) *(*(_trg_obj->_coord + 0) + 1) || *(_contr_r + 1) < (uint32_t)*(*(_trg_obj->_coord + 1) + 1)) :  
-																	 !(*(_contr_r + 1) < (uint32_t) *(*(_trg_obj->_coord + 0) + 1) || *(_contr_r + 1) > (uint32_t) *(*(_trg_obj->_coord + 1) + 1));
+					       !(*(_contr_r + 1) < (uint32_t) *(*(_trg_obj->_coord + 0) + 1) || *(_contr_r + 1) > (uint32_t) *(*(_trg_obj->_coord + 1) + 1));
 
 	 while(_dissective_) { 
 			*(_contr_r + 1) = _util_gener(_genr, 45);
