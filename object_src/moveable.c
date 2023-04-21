@@ -1,4 +1,3 @@
-
 #include <stdio.h> 
 #include "grid_handle.h"
 #include "moveable.h"
@@ -7,11 +6,11 @@
 
 
 
-extern void __attribute__((no_inline)) _traversion(void (*_clb_relocate)(char16 _grid[12][100], struct _MOVEABLE_ _mvbl), void (*_populate_grid) (char16 _grid[12][100], struct _MOVEABLE_ _mbvl, const size_t _seed)) {
+extern void __attribute__((no_return)) _traversion(void (*_clb_relocate)(char16 _grid[12][100], struct _MOVEABLE_ _mvbl), void (*_populate_grid) (char16 _grid[12][100], struct _MOVEABLE_ _mbvl, const size_t _seed)) {
 	  
 }
 
-extern void __attribute__((no_inline)) _trv_clb_r(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {
+extern void _trv_clb_r(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {
 			//bool _exf = false;
 			//if(_exf && _dir_f == "L") {_exf = false; _is_dw_lf_down = false; _is_rowized = false;} 
 			if(_exf && !(_dir_f != "L")) {_exf = false;}
@@ -75,9 +74,9 @@ extern void __attribute__((no_inline)) _trv_clb_r(struct _MOVEABLE_* _mvbl, char
 			if(!_traversed_dig && _traversed) { _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] = '*'; _traversed = false;} 
 			else { 
 				     if((!_exfoliate && !_exf) || (_is_dw_lf_down && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] == '-'))) 
-				             {if (_bvr_a && _is_dw_lf_down) {_bvr_a = false;}_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; 
-			                    if(!_traversed_dig && !_exf) *(*(_exm + 0) + 1) += 1; 
-			                           else { *(*(_exm + 0) + 0) += 1; _traversed_dig = false;  }  } } //dw traversion l prv/r prv supported
+				          {if (_bvr_a && _is_dw_lf_down) {_bvr_a = false;}_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; 
+			                      if(!_traversed_dig && !_exf) *(*(_exm + 0) + 1) += 1; 
+			                            else { *(*(_exm + 0) + 0) += 1; _traversed_dig = false;  }  } } //dw traversion l prv/r prv supported
 																																//TODO l prv-dw without top-clearence mend the undefined immediate overriding of a recently modified cell
      	                if(_is_dw_lf_down && !(_dir_prv != "L") && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] != '-')) {_bvr_a = false; _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; *(*(_exm + 0) + 1) -= 1;} //top-clearance for prv left/dw request
 			
@@ -93,7 +92,7 @@ extern void __attribute__((no_inline)) _trv_clb_r(struct _MOVEABLE_* _mvbl, char
 
 }
 
-extern void __attribute__((no_return)) _trv_clb_l(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {
+extern void _trv_clb_l(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {
   
 			if(!_exf) {_dir_prv = _dir_f; _exf = true;} //re-synchronize to falsity prior to directional switch
 			_dir_f = "L";
@@ -168,6 +167,6 @@ extern void __attribute__((no_return)) _trv_clb_l(struct _MOVEABLE_* _mvbl, char
 
 }
 
-extern void __attribute__((no_inline)) _trv_clb_d(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {}
+extern void _trv_clb_d(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {}
 
-extern void __attribute__((no_inline)) _trv_clb_u(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {}
+extern void _trv_clb_u(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {}
