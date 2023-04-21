@@ -9,8 +9,8 @@
 
 typedef struct _RBT_CTR_{
     struct _GNR_D* _gener_dr;
-		_ptr_int32* _coord_tgbl;
-		_bool_ _init_;
+    _ptr_int32* _coord_tgbl;
+    _bool_ _dispatched_;
 }_RBT_CTR_;
 
 extern void __attribute__((no_inline)) _nav_rb_handle(struct _RBT_CTR_* _RBT_CTR, char16 _DECOR_[12][100]);
