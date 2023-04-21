@@ -19,10 +19,11 @@ extern void __attribute__((no_inline)) _trv_clb_r(struct _MOVEABLE_* _mvbl, char
 			_dir_f = "R";
 		  
 			if(!(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] == '-')) {_is_rowized = false;}
-			if (!_trv_b && _dir_prv == "L" && !(*(*(_exm + 0) + 0) == *(*(_exm + 1) + 0) && !_is_rowized) && !_is_dw_lf_down) { if (!_exf) { size_t _tm = *(*(_exm + 0) + 1); size_t _pn = *(*(_exm + 0) + 0); 
-				                    *(*(_exm + 0) + 0) = *(*(_exm + 1) + 0); *(*(_exm + 0) + 1) = *(*(_exm + 1) + 1); *(*(_exm + 1) + 0) = _pn; 
-				                    *(*(_exm + 1) + 1) = _tm; } _exf = true; _trv_b = true; _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*';	
-			                      *(*(_exm + 0) + 0) -= 1; _bvr_a = true; _is_dw_lf_down = true;} //escalation-request from up prv-left node
+			if (!_trv_b && _dir_prv == "L" && !(*(*(_exm + 0) + 0) == *(*(_exm + 1) + 0) && !_is_rowized) && !_is_dw_lf_down) {
+				         if (!_exf) { size_t _tm = *(*(_exm + 0) + 1); size_t _pn = *(*(_exm + 0) + 0); 
+				                    *(*(_exm + 0) + 0) = *(*(_exm + 1) + 0); *(*(_exm + 0) + 1) = *(*(_exm + 1) + 1); *(*(_exm + 1) + 0) = _pn; *(*(_exm + 1) + 1) = _tm; } 
+				                     _exf = true; _trv_b = true; _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*';	
+			                             *(*(_exm + 0) + 0) -= 1; _bvr_a = true; _is_dw_lf_down = true;} //escalation-request from up prv-left node
 																																																																																															
 			if (!(_DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1) + 1] != 'X')){
 				_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '-';
@@ -62,7 +63,7 @@ extern void __attribute__((no_inline)) _trv_clb_r(struct _MOVEABLE_* _mvbl, char
 				                    *(*(_exm + 0) + 0) -= 1; _exfoliate = true;}
 			
 			if (!_exf && !_exfoliate && !(_DECOR_[*(*(_exm + 0) + 0) + 1][*(*(_exm + 0) + 1)] != '-') && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] == '-') ) {*(*(_exm + 0) + 0) += 1;_traversed = true;}
-      if(! _exfoliate && !_traversed && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] != '-') && !(_DECOR_[*(*(_exm + 0) + 0) + 1][*(*(_exm + 0) + 1)] != '-')) {_traversed_dig = true; }
+                        if(! _exfoliate && !_traversed && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] != '-') && !(_DECOR_[*(*(_exm + 0) + 0) + 1][*(*(_exm + 0) + 1)] != '-')) {_traversed_dig = true; }
 			
 			_DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1) += 1] = '-';
 
@@ -78,8 +79,9 @@ extern void __attribute__((no_inline)) _trv_clb_r(struct _MOVEABLE_* _mvbl, char
 			                    if(!_traversed_dig && !_exf) *(*(_exm + 0) + 1) += 1; 
 			                           else { *(*(_exm + 0) + 0) += 1; _traversed_dig = false;  }  } } //dw traversion l prv/r prv supported
 																																//TODO l prv-dw without top-clearence mend the undefined immediate overriding of a recently modified cell
-     	if(_is_dw_lf_down && !(_dir_prv != "L") && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] != '-')) {_bvr_a = false; _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; *(*(_exm + 0) + 1) -= 1;} //top-clearance for prv left/dw request
-			if ((!_is_rowized && _exf && _dir_prv == "L" && !(*(*(_exm + 0) + 0) != *(*(_exm + 1) + 0)))) {_exf = false; _is_dw_lf_down = false; _trv_b = false;} 
+     	                if(_is_dw_lf_down && !(_dir_prv != "L") && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] != '-')) {_bvr_a = false; _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; *(*(_exm + 0) + 1) -= 1;} //top-clearance for prv left/dw request
+			
+	                if ((!_is_rowized && _exf && _dir_prv == "L" && !(*(*(_exm + 0) + 0) != *(*(_exm + 1) + 0)))) {_exf = false; _is_dw_lf_down = false; _trv_b = false;} 
 
 			for (size_t a = 0; a < 20; ++a) {
 				printf("\n");
@@ -97,7 +99,7 @@ extern void __attribute__((no_return)) _trv_clb_l(struct _MOVEABLE_* _mvbl, char
 			_dir_f = "L";
 			
 			//add directional-support
-      if((!(*(*(_exm + 0) + 1)) <= 0) && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] != 'X')) {
+                         if((!(*(*(_exm + 0) + 1)) <= 0) && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] != 'X')) {
 				    _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) -= 1] = '-';
 				    // printf("%d",*(*(_exm + 0) + 1));
 				     _DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1)] = '-'; 
@@ -116,7 +118,7 @@ extern void __attribute__((no_return)) _trv_clb_l(struct _MOVEABLE_* _mvbl, char
 			}
 
 
-      system("CLS");
+                      system("CLS");
 
 			bool _traversed_l_d = false;
 			bool _trv_all = false;
@@ -139,15 +141,15 @@ extern void __attribute__((no_return)) _trv_clb_l(struct _MOVEABLE_* _mvbl, char
 
 			if (!_trv_tp_clr_rprv && !_clr_tl_d && !(_DECOR_[*(*(_exm + 0) + 0) + 1][*(*(_exm + 0) + 1) - 1] != '-') && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] != '-') && !(_dir_prv != "R")) {
 				                              _DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1) -= 1] = '-'; *(*(_exm + 0) + 0) += 1;
-																			              _traversed_l_d = true;}//dynamic coordinate exchange
+							              _traversed_l_d = true;}//dynamic coordinate exchange
       
 			if(!_clr_tl_d && !_traversed_l_d && (*(*(_exm + 0) + 0) == *(*(_exm + 1) + 0)) && !_trv_dw_prvl_row) {	_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) -= 1] = '-'; 
-			 _DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1)] = '*';	*(*(_exm + 1) + 1) -= 1;  b++; _ecm = 0;} //regular L traversion
+			                 _DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1)] = '*';	*(*(_exm + 1) + 1) -= 1;  b++; _ecm = 0;} //regular L traversion
 			
 			else {if(!_clr_tl_d && !_traversed_l_d && !_trv_all && !_ltr_f) { { 
 				                        if(!_trv_tp_clr_rprv_ldw && !_trv_dw_prvl_row) _DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1) -= 1] = '-'; 
 				                                 else { _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) -= 1] = '-';} 
-																				                        if(!_trv_tp_clr_rprv && !_trv_tp_clr_rprv_ldw && !_trv_dw_prvl_row) {_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; 
+						                      if(!_trv_tp_clr_rprv && !_trv_tp_clr_rprv_ldw && !_trv_dw_prvl_row) {_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; 
 					                                                                 *(*(_exm + 0) + 0) += 1 ;c = 2000;} } } 
 			}
 			//prv R bottom traversion
