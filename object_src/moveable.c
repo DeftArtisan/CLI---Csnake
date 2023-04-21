@@ -148,7 +148,7 @@ extern void __attribute__((no_return)) _trv_clb_l(struct _MOVEABLE_* _mvbl, char
 			
 			else {if(!_clr_tl_d && !_traversed_l_d && !_trv_all && !_ltr_f) { { 
 				                        if(!_trv_tp_clr_rprv_ldw && !_trv_dw_prvl_row) _DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1) -= 1] = '-'; 
-				                                 else { _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) -= 1] = '-';} 
+				                              else { _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) -= 1] = '-';} 
 						                      if(!_trv_tp_clr_rprv && !_trv_tp_clr_rprv_ldw && !_trv_dw_prvl_row) {_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; 
 					                                                                 *(*(_exm + 0) + 0) += 1 ;c = 2000;} } } 
 			}
@@ -157,7 +157,7 @@ extern void __attribute__((no_return)) _trv_clb_l(struct _MOVEABLE_* _mvbl, char
 				                       *(*(_exm + 0) + 1) = *(*(_exm + 1) + 1); *(*(_exm + 1) + 1) = _tm; }
 			 //actualized dynamic exchange
 																//
-		  for (size_t a = 0; a < 20; ++a) {
+		       for (size_t a = 0; a < 20; ++a) {
 				printf("\n");
 			}
       //_traversed_b = false;
