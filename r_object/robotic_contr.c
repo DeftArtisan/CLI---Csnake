@@ -30,7 +30,7 @@ extern void __attribute__((no_inline)) _nav_rb_handle(struct _RBT_CTR_* _RBT_CTR
 
 		  _bool_ bi_dir_v = *(*(_RBT_CTR->_coord_tgbl + 1) + 1) > 4 ? false : true;
 			if(bi_dir_v) {
-				_RBT_CTR->_init_ = false;
+				_RBT_CTR->_dispatched_ = false;
 				//dw-left
                                if(!(*(*(_RBT_CTR->_coord_tgbl + 1) + 1) < 4)) {
 					     //fprintf(stderr, "inaccessible");
