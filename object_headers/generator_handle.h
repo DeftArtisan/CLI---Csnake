@@ -6,7 +6,6 @@
 #include "moveable.h"
 #include <stdio.h> 
 #include <stdint.h> 
-#include <assert.h>
 #include <stdlib.h>
 
 typedef struct _GNR_D{ 
