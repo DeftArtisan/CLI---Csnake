@@ -1,4 +1,7 @@
-import os 
+import os
+import math
+
+_divisor = 12
 
 _textual_sa:list = [
    "-*************************",  
@@ -17,8 +20,11 @@ _textual_sa:list = [
 ]
 
 def _exemp_s():
+    for _ in range(0, round(len(_textual_sa[0]) / (_divisor / 5))):
+        _textual_sa.append(_textual_sa[1])
     with open('_grid_.txt', 'w') as _wr_fl:
-        _wr_fl.write(("".join([(str((x + x) * 2)) + "\n" for x in _textual_sa if not _textual_sa.index("-")]))
-             + str([_textual_sa.append(_textual_sa[2]) for x in range(0, 2**4)]))
+        _wr_fl.write(
+          ("".join([str((x + x) * (round(len(_textual_sa[0]) / (_divisor + 10)))).replace("-", "*") + "\n" for x in _textual_sa]))
+        )
 
-_exemp_s();
+_exemp_s()
