@@ -19,7 +19,7 @@ typedef struct _GNR_D{
 
 }_GNR_D;
 
-extern uint32_t __attribute__((no_inline)) _util_gener(struct _GNR_D* _genr, const uint32_t seed);
+extern uint32_t _util_gener(struct _GNR_D* _genr, const uint32_t seed);
 
 extern uint32_t* _handler_gen(struct _GNR_D* _genr, const char16 _grid[45][40], const struct _MOVEABLE_* _trg_obj);
 
