@@ -1,49 +1,47 @@
+#ifndef MOVEABLE_H
+#define MOVEABLE_H
+#endif
+
 #include <stdio.h> 
-#include "definitive.h"
-#include <Windows.h> 
+#include "definitive.h" 
 
-
-typedef struct _MOVEABLE_{
-   _ptr_int* _coord;
-	 _ptr_char16 _direction;
-	 _ptr_char16 _prv_direction;
-	 _bool_ flg_state_of_row_indicator
-	 _bool_ flg_state_of_multi_row_indicator
-	 _bool_ flg_disable_premature_row_increment
+enum _designation_crd {
+	 M_VK_LEFT,
+	 M_VK_RIGHT,
+	 M_VK_UP,
+	 M_VK_DOWN
 };
 
-//move to traversion handler
-extern void __attribute__((no_inline)) _traversion(void (*_clb_relocate)(char_16[12][100] _grd, struct _MOVEABLE_ _mvbl), void (*_populate_grid) (char16[12][100], _grd, struct _MOVEABLE_ _mbvl, const size_t _seed)) {      
+typedef struct _MOVEABLE_{
+	 enum _designation_crd _design_crd;
+   _ptr_int32* _coord;
+	 _ptr_char16 _direction;
+	 _ptr_char16 _prv_direction;
+	 _bool_ _trv_r_reenabled;
+	 _bool_ _trv_exf;
+	 _bool_ _trv_exf_dis;
+	 _bool_ flg_state_of_row_indicator;
+	 _bool_ flg_state_of_mlt_r;
+	 _bool_ flg_disable_prem_r;
+	 _bool_ flg_ena_mlt;
+	 _bool_ _dyn_exch_l;
+}_MOVEABLE_;
 
-}
-extern void __attribute__((no_inline)) _trv_clb_r(struct _MOVEABLE_* _mvbl, char16[12][100] _grd) {
-    
-}
-extern void __attribute__((no_inline)) _trv_clb_l(struct _MOVEABLE_* _mvbl, char16[12][100] _grd) {
-    
-}
-extern void __attribute__((no_inline)) _trv_clb_d(struct _MOVEABLE_* _mvbl, char16[12][100] _grd) {
-    
-}
-extern void __attribute__((no_inline)) _trv_clb_u(struct _MOVEABLE_* _mvbl, char16[12][100] _grd) {
-    
-}
 
-static _ptr_int* __attribute__((malloc))_init_fld_coord() {
-	_ptr_int32* _exm = (_ptr_int32*)_allocative_(sizeof(_ptr_int32) * 2);
-	for (size_t g = 0; g < 2; ++g) {
-		*(_exm + g) = (_ptr_int32)_allocative_(sizeof(int) * 2);
-		for (size_t a = 0; a < 2; ++a) {
-			*(*(_exm + g) + a) = 0;
-		}
-	}
+extern _ptr_int32* __attribute__((malloc))_init_fld_coord();
 
-	return &(*_exm);
-}
+extern void __attribute__((no_inline)) _mbvl_res(struct _MOVEABLE_* _moveb_);
 
-extern _MOVEABLE_* __attribute__((malloc)) _init_mvbl() {   
-	_MOVEABLE_* _mvb_locale = (_MOVEABLE*) _allocative_(sizeof(struct _MOVEABLE_)); 
-	_mvb_locale->_coord = _init_fld_coord();
-	_pause_thread(200);
-	return &(*_mvb_locale);
-}
+extern void __attribute__((no_inline)) _traversion(struct _MOVEABLE_* _mbvl, const size_t _seed, char16 _grid[12][24]);
+
+extern _bool_ __attribute__((no_inline)) _trv_clb_r(struct _MOVEABLE_* _mvbl, char16 _grid[12][24]);
+
+extern _bool_ __attribute__((no_inline)) _trv_clb_l(struct _MOVEABLE_* _mvbl, char16 _grid[12][24]);
+
+extern _bool_ __attribute__((no_inline)) _trv_clb_d(struct _MOVEABLE_* _mvbl, char16 _grid[12][24]);
+
+extern _bool_ __attribute__((no_inline)) _trv_clb_u(struct _MOVEABLE_* _mvbl, char16 _grid[12][24]);
+
+extern void _deallocative_mbvl(struct _MOVEABLE_* _mbvl);
+
+extern struct _MOVEABLE_* __attribute__((malloc)) _init_mvbl();
