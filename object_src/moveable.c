@@ -49,50 +49,51 @@ _bool_ __attribute__((no_inline)) _trv_clb_r(struct _MOVEABLE_* _mvbl, char16 _g
 			//if(_exf && _mvbl->_direction == "L") {_exf = false; _mvbl->flg_state_of_mlt_r = false; _is_rowized = false;} 
 
 			//TODO handle the dynamic exchange's(for both directions) incompletion(e.g avoided trigger-point) since procures inconsistency in coordination 
-			if(_mvbl->_trv_exf && _cmp_str(_mvbl->_direction,  "L")) { _mvbl->_trv_exf = false; _mvbl->_trv_exf_dis = true;}
-			if(!_mvbl->_trv_exf && _mvbl->_trv_exf_dis) {_mvbl->_prv_direction = _mvbl->_direction; _mvbl->_trv_exf_dis = false;}
+	    if(_mvbl->_trv_exf && _cmp_str(_mvbl->_direction,  "L")) { _mvbl->_trv_exf = false; _mvbl->_trv_exf_dis = true;}
+	    if(!_mvbl->_trv_exf && _mvbl->_trv_exf_dis) {_mvbl->_prv_direction = _mvbl->_direction; _mvbl->_trv_exf_dis = false;}
 
-			_mvbl->_direction = "R";
+	   _mvbl->_direction = "R";
 		  
-			if(!(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] == '-')) {_mvbl->flg_state_of_row_indicator = false;}
-			if (!_mvbl->flg_ena_mlt	&& _cmp_str(_mvbl->_prv_direction, "L") && !_mvbl->flg_state_of_row_indicator && !_mvbl->flg_state_of_mlt_r) { 
-				if (!_mvbl->_trv_exf) 
-				       { size_t _tm = *(*(_mvbl->_coord + 0) + 1); size_t _pn = *(*(_mvbl->_coord + 0) + 0); 
-				*(*(_mvbl->_coord + 0) + 0) = *(*(_mvbl->_coord + 1) + 0); *(*(_mvbl->_coord + 0) + 1) = *(*(_mvbl->_coord + 1) + 1); *(*(_mvbl->_coord + 1) + 0) = _pn; 
-				*(*(_mvbl->_coord + 1) + 1) = _tm; } 
-				     _mvbl->_trv_exf = true; _mvbl->flg_disable_prem_r = true; _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*';	*(*(_mvbl->_coord + 0) + 0) -= 1; 
-			       _mvbl->flg_ena_mlt= true; _mvbl->flg_state_of_mlt_r = true; _mvbl->_dyn_exch_l = false;} //escalation-request from up prv-left node
-																																																																																																						 //
-				/*																																																																																																		 
-        if(!(_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]-1] == '-')) {_is_rowized = false;}
-        if(!_mvbl->flg_disable_prem_r && _cmp_str(_dir_prv, "L" ) && !(_mvbl->_coord[0][0] == _mvbl->_coord[1][0] && _mvbl->flg_state_of_row_indicator) && !_mvbl->flg_state_of_mlt_r && _dyn_exch_l) { if(!_exf) {size_t _tm = _mvbl->_coord[0][1]; size_t _pn = _mvbl->_coord[0][0]; _mvbl->_coord[0][0] = _mvbl->_coord[1][0];
-        _mvbl->_coord[0][1] = _mvbl->_coord[1][1]; _mvbl->_coord[1][0] = _pn; _mvbl->_coord[1][1] = _tm; } _exf = true; _mvbl->flg_disable_prem_r = true; _grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*'; _mvbl->_coord[0][0] -= 1; _bvr_a = true; _mvbl->flg_state_of_mlt_r = true; _dyn_exch_l = false; }
-					*/																																																																																										
-			if (!(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) + 1] != 'X')){
-				_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '-';
-				_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) += 1] = '-';
-				system("CLS");
-				for (size_t a = 0; a < 20; ++a) {
-					printf("\n");
-				}
+	if (!(_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1] - 1] == '-')) { _mvbl->flg_state_of_row_indicator = false;}
 
-       	//printf("\t\t\t\t\t\t   %s%s\n\n\n", _exclaimed_, _decor); printf("%s", _reset_);
-			
-			  _buff_render(_grid);
-				
-				//_cl_buff_render(_grid);
-				return false;
+	if (!_mvbl->flg_ena_mlt && _cmp_str(_mvbl->_prv_direction, "L") && !_mvbl->flg_state_of_row_indicator && !_mvbl->flg_state_of_mlt_r) {
+		if (!_mvbl->_trv_exf) { size_t _tm = _mvbl->_coord[0][1]; size_t _pn = _mvbl->_coord[0][0]; _mvbl->_coord[0][0] = _mvbl->_coord[1][0];
+			_mvbl->_coord[0][1] = _mvbl->_coord[1][1]; _mvbl->_coord[1][0] = _pn; _mvbl->_coord[1][1] = _tm; }
+		_mvbl->_trv_exf = true; _mvbl->flg_disable_prem_r = true;
+		_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*'; _mvbl->_coord[0][0] -= 1; _mvbl->flg_ena_mlt = true;
+		_mvbl->flg_state_of_mlt_r = true; _mvbl->_dyn_exch_l = false; }
 
-       }
+	if (!(_grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1] + 1] != 'X')) {
+		_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '-';
+		_grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1] += 1] = '-';
+		system("CLS");
+		for (size_t a = 0; a < 20; ++a) {
+			printf("\n");
+		}
 
-			system("CLS");
-			bool _traversed_dig = false;
-			bool _traversed = false;
-			bool _exfoliate = false;
-			bool _dw_l_r = false;
-			bool _trv_r_non_dyn = false;
-			///$WinREAgent_direc_r = true;
-			//char* _g = " ";
+		_buff_render(_grid);
+
+		return false;
+	}
+
+	system("CLS");
+	bool _traversed_dig = false;
+	bool _traversed = false;
+	bool _exfoliate = false;
+	bool _dw_l_r = false;
+	bool _trv_r_non_dyn = false;
+	///$WinREAgent_direc_r = true;
+	//char* _g = " ";
+
+	//add support for left-down request and its top clearance
+
+	if (_mvbl->flg_disable_prem_r && (!(_grid[_mvbl->_coord[0][0] + 1][_mvbl->_coord[0][1] - 1] != '-')) && _mvbl->_trv_exf) { _mvbl->_coord[0][0] += 1;}
+	
+	if (_cmp_str(_mvbl->_prv_direction, "L") && _mvbl->_trv_exf && !(_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1] - 1] != '-') &&
+		(!(_mvbl->_coord[0][0] < _mvbl->_coord[1][0]) || !(_mvbl->_coord[0][0] > _mvbl->_coord[1][0]))) {
+		_mvbl->flg_state_of_row_indicator = true;
+		if (_mvbl->flg_disable_prem_r
+	
 
       //add support for left-down request and its top clearance
 
@@ -128,21 +129,28 @@ _bool_ __attribute__((no_inline)) _trv_clb_r(struct _MOVEABLE_* _mvbl, char16 _g
 
        _grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) += 1] = '-';
 		
-	if(!_traversed_dig && _traversed) { _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] = '*'; _traversed = false;} 
-	else { 
-	  if(!_trv_r_non_dyn && !_dw_l_r && ((!_exfoliate && !_mvbl->flg_state_of_row_indicator) || (_mvbl->flg_state_of_mlt_r && 
-                          !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] == '-')) || 
-                           (_cmp_str(_mvbl->_prv_direction, "L") && _grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1)] == '-' && !_mvbl->flg_state_of_row_indicator)))
-				 {if (_mvbl->flg_disable_prem_r	 && _mvbl->flg_state_of_mlt_r && !_trv_r_non_dyn)  
-				        {_mvbl->flg_disable_prem_r = false;}
-                                        _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; 
-			                      if(!_traversed_dig) { *(*(_mvbl->_coord + 0) + 1) += 1; } 
-                                   else { *(*(_mvbl->_coord + 0) + 0) += 1; _traversed_dig = false;}  } } //dw traversion l prv/r prv supported
+   if (!_traversed_dig && _traversed) { _grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1] - 1] = '*'; _traversed = false;}
+		    
+   else {
+	if (!_trv_r_non_dyn && !_dw_l_r && ((!_exfoliate && !_mvbl->flg_state_of_row_indicator) || (_mvbl->flg_state_of_mlt_r && !(_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1] - 1] == '-')) ||
+		(_cmp_str(_mvbl->_prv_direction, "L") && _grid[_mvbl->_coord[0][0] + 1][_mvbl->_coord[0][1]] == '-' && !_mvbl->flg_state_of_row_indicator))) {
+		if (_mvbl->flg_disable_prem_r && _mvbl->flg_state_of_mlt_r && !_trv_r_non_dyn) { _mvbl->flg_disable_prem_r = false; }
+		   _grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*';
+		  if (!_traversed_dig) { _mvbl->_coord[0][1] += 1;}
+		      else { _mvbl->_coord[0][0] += 1; _traversed_dig = false;}
+	}
+}
 
-																																//TODO l prv-dw without top-clearence mend the undefined immediate overriding of a recently modified cell
-     	
-	if(_mvbl->flg_state_of_mlt_r && _cmp_str(_mvbl->_prv_direction, "L") && !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] != '-') && !_trv_r_non_dyn) 
-			         {_mvbl->flg_disable_prem_r = false; _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) -= 1;} //to
+// dw traversion l prv/r prv supported
+// TODO l prv-dw without top-clearence mend the undefined immediate overriding of a recently modified cell
+
+if (_mvbl->flg_state_of_mlt_r && _cmp_str(_mvbl->_prv_direction, "L") && !(_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1] - 1] != '-') && !_trv_r_non_dyn) {
+	_mvbl->flg_disable_prem_r = false;
+	_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*';
+	_mvbl->_coord[0][1] -= 1;
+}
+	    
+		    
 
 	for (size_t a = 0; a < 20; ++a) {
 		printf("\n");
