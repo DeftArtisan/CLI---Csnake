@@ -1,8 +1,27 @@
-#include "generator_r.h"
-#include <stdlib.h>
+#ifndef GENERATOR_R_H
+#define GENERATOR_R_H
+#endif
+
+#include "definitive.h"
+#include "moveable.h"
+#include <stdio.h> 
+#include <stdint.h> 
 #include <assert.h>
+#include <stdlib.h>
 
 
+//extern uint32_t __attribute__((no_inline)) _util_gener(struct _GNR_D* _genr, const uint32_t seed);
+
+typedef struct _GNR_D{ 
+	 
+	union{
+      uint32_t seed_recep;
+	    uint32_t m1_tm;
+	    uint32_t m2_tm;
+	    uint64_t tmp_recep;
+	 };
+
+}_GNR_D;
 
 extern uint32_t __attribute__((no_inline)) _util_gener(struct _GNR_D* _genr, const uint32_t seed) {
                  _genr->seed_recep = seed;
@@ -22,12 +41,15 @@ extern uint32_t* _handler_gen(struct _GNR_D* _genr, const char16 _grid[45][40], 
 	 _bool_ _dissective_ = false;
 	 _dissective_ = *(*(_trg_obj->_coord + 0) + 1) > *(*(_trg_obj->_coord + 1) + 1) ? 
 		                               !(*(_contr_r + 1) > (uint32_t) *(*(_trg_obj->_coord + 0) + 1) || *(_contr_r + 1) < (uint32_t)*(*(_trg_obj->_coord + 1) + 1)) :  
-					       !(*(_contr_r + 1) < (uint32_t) *(*(_trg_obj->_coord + 0) + 1) || *(_contr_r + 1) > (uint32_t) *(*(_trg_obj->_coord + 1) + 1));
+                                               !(*(_contr_r + 1) < (uint32_t) *(*(_trg_obj->_coord + 0) + 1) || *(_contr_r + 1) > (uint32_t) *(*(_trg_obj->_coord + 1) + 1));
 
 	 while(_dissective_) { 
-			*(_contr_r + 1) = _util_gener(_genr, 45);
+		*(_contr_r + 1) = _util_gener(_genr, 45);
 	 }
 	 
 	 return _contr_r;
 }
 
+extern void _deallocative_gnr_d(struct _GNR_D* _gnr_d){
+	 _deallocative_(_gnr_d);
+}
