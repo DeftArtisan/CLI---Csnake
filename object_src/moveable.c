@@ -1,172 +1,448 @@
-#include <stdio.h> 
-#include "grid_handle.h"
+#include <stdio.h>
 #include "moveable.h"
 
 
+extern void _buff_render(char16 _grid[12][24]){
+	for (size_t g = 0; g < 12; ++g) {
+		 for (size_t b = 0; b < 6; ++b) {
+		     printf("\t");
+			for (size_t a = 0; b >= 5 && a < 24; ++a) {	
+			    if(_grid[g][a] == '-' || g == 0 || g == 11 || a == 23 || a == 0){  
+				  if(_grid[g][a] == '-') {printf("%s", _actorPL);}
+					printf("%c", _grid[g][a]);
+					printf("%s", _reset_);
+					if (a == 23)
+					     goto _sep;
+					continue;
+				   }
+							
+						 printf(" ");
+                                    _sep:
+				        if (a >= 23) {
+					   printf("\n");
+				        }
+							
+				    }
+			  }
+		}
 
-
-
-extern void __attribute__((no_return)) _traversion(void (*_clb_relocate)(char16 _grid[12][100], struct _MOVEABLE_ _mvbl), void (*_populate_grid) (char16 _grid[12][100], struct _MOVEABLE_ _mbvl, const size_t _seed)) {
-	  
 }
 
-extern void _trv_clb_r(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {
+extern void __attribute__((no_inline)) _traversion( struct _MOVEABLE_* _mbvl, const size_t seed, char16 _grid[12][24]) { 
+	  _assert_(_mbvl != NULL);
+	  _buff_render(_grid);
+		
+	   while(!_get_async_key_state_win(VK_ESCAPE)) {
+	         if(_get_async_key_state_win(VK_RIGHT)) {_trv_clb_r(_mbvl, _grid); _pause_thread(200);}
+		 else if(_get_async_key_state_win(VK_LEFT)) {_pause_thread(200); _trv_clb_l(_mbvl, _grid);}
+                 else if(_get_async_key_state_win(VK_UP)) {_pause_thread(200);_trv_clb_u(_mbvl, _grid);}
+                 else if(_get_async_key_state_win(VK_DOWN)) {_pause_thread(200); _trv_clb_d(_mbvl, _grid);}
+	  }
+}
+
+extern _bool_ _cmp_str(_ptr_char16 _n1, _ptr_char16 _n2) {return (*(_ptr_char16)(_n1)) == (*(_ptr_char16)(_n2));}
+
+_bool_ __attribute__((no_inline)) _trv_clb_r(struct _MOVEABLE_* _mvbl, char16 _grid[12][24]) {
+      
+	    _mvbl->_trv_r_reenabled = true;
 			//bool _exf = false;
-			//if(_exf && _dir_f == "L") {_exf = false; _is_dw_lf_down = false; _is_rowized = false;} 
-			if(_exf && !(_dir_f != "L")) {_exf = false;}
-			if(!_exf) _dir_prv = _dir_f;
-			_dir_f = "R";
+			//if(_exf && _mvbl->_direction == "L") {_exf = false; _mvbl->flg_state_of_mlt_r = false; _is_rowized = false;} 
+
+			//TODO handle the dynamic exchange's(for both directions) incompletion(e.g avoided trigger-point) since procures inconsistency in coordination 
+			if(_mvbl->_trv_exf && _cmp_str(_mvbl->_direction,  "L")) { _mvbl->_trv_exf = false; _mvbl->_trv_exf_dis = true;}
+			if(!_mvbl->_trv_exf && _mvbl->_trv_exf_dis) {_mvbl->_prv_direction = _mvbl->_direction; _mvbl->_trv_exf_dis = false;}
+
+			_mvbl->_direction = "R";
 		  
-			if(!(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] == '-')) {_is_rowized = false;}
-			if (!_trv_b && _dir_prv == "L" && !(*(*(_exm + 0) + 0) == *(*(_exm + 1) + 0) && !_is_rowized) && !_is_dw_lf_down) {
-				         if (!_exf) { size_t _tm = *(*(_exm + 0) + 1); size_t _pn = *(*(_exm + 0) + 0); 
-				                    *(*(_exm + 0) + 0) = *(*(_exm + 1) + 0); *(*(_exm + 0) + 1) = *(*(_exm + 1) + 1); *(*(_exm + 1) + 0) = _pn; *(*(_exm + 1) + 1) = _tm; } 
-				                     _exf = true; _trv_b = true; _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*';	
-			                             *(*(_exm + 0) + 0) -= 1; _bvr_a = true; _is_dw_lf_down = true;} //escalation-request from up prv-left node
-																																																																																															
-			if (!(_DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1) + 1] != 'X')){
-				_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '-';
-				_DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1) += 1] = '-';
-				_tl++;
+			if(!(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] == '-')) {_mvbl->flg_state_of_row_indicator = false;}
+			if (!_mvbl->flg_ena_mlt	&& _cmp_str(_mvbl->_prv_direction, "L") && !_mvbl->flg_state_of_row_indicator && !_mvbl->flg_state_of_mlt_r) { 
+				if (!_mvbl->_trv_exf) 
+				       { size_t _tm = *(*(_mvbl->_coord + 0) + 1); size_t _pn = *(*(_mvbl->_coord + 0) + 0); 
+				*(*(_mvbl->_coord + 0) + 0) = *(*(_mvbl->_coord + 1) + 0); *(*(_mvbl->_coord + 0) + 1) = *(*(_mvbl->_coord + 1) + 1); *(*(_mvbl->_coord + 1) + 0) = _pn; 
+				*(*(_mvbl->_coord + 1) + 1) = _tm; } 
+				     _mvbl->_trv_exf = true; _mvbl->flg_disable_prem_r = true; _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*';	*(*(_mvbl->_coord + 0) + 0) -= 1; 
+			       _mvbl->flg_ena_mlt= true; _mvbl->flg_state_of_mlt_r = true; _mvbl->_dyn_exch_l = false;} //escalation-request from up prv-left node
+																																																																																																						 //
+				/*																																																																																																		 
+        if(!(_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]-1] == '-')) {_is_rowized = false;}
+        if(!_mvbl->flg_disable_prem_r && _cmp_str(_dir_prv, "L" ) && !(_mvbl->_coord[0][0] == _mvbl->_coord[1][0] && _mvbl->flg_state_of_row_indicator) && !_mvbl->flg_state_of_mlt_r && _dyn_exch_l) { if(!_exf) {size_t _tm = _mvbl->_coord[0][1]; size_t _pn = _mvbl->_coord[0][0]; _mvbl->_coord[0][0] = _mvbl->_coord[1][0];
+        _mvbl->_coord[0][1] = _mvbl->_coord[1][1]; _mvbl->_coord[1][0] = _pn; _mvbl->_coord[1][1] = _tm; } _exf = true; _mvbl->flg_disable_prem_r = true; _grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*'; _mvbl->_coord[0][0] -= 1; _bvr_a = true; _mvbl->flg_state_of_mlt_r = true; _dyn_exch_l = false; }
+					*/																																																																																										
+			if (!(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) + 1] != 'X')){
+				_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '-';
+				_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) += 1] = '-';
 				system("CLS");
 				for (size_t a = 0; a < 20; ++a) {
 					printf("\n");
 				}
 
-       	printf("\t\t\t\t\t\t   %s%s\n\n\n", _exclaimed_, _decor); printf("%s", _reset_);
+       	//printf("\t\t\t\t\t\t   %s%s\n\n\n", _exclaimed_, _decor); printf("%s", _reset_);
 			
-			  _buff_render(_DECOR_);
-
-				continue;
+			  _buff_render(_grid);
+				
+				//_cl_buff_render(_grid);
+				return false;
 
        }
 
 			system("CLS");
 			bool _traversed_dig = false;
+			bool _traversed = false;
 			bool _exfoliate = false;
 			bool _dw_l_r = false;
-			int c = 0;
-			int tr = 0;
-			_direc_r = true;
+			bool _trv_r_non_dyn = false;
+			///$WinREAgent_direc_r = true;
+			//char* _g = " ";
 
       //add support for left-down request and its top clearance
 
-			if(_bvr_a && (!(_DECOR_[*(*(_exm + 0) + 0) + 1][*(*(_exm + 0) + 1) - 1] != '-'))) {*(*(_exm + 0) + 0) += 1;} //determination of multi-tail flag for lprv + up
-      
-			if(!(_dir_prv != "L") && _exf && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] != '-') && !(*(*(_exm + 0) + 0) < *(*(_exm + 1) + 0))) {
-				                  _is_rowized = true; 
-				                  if(_bvr_a) {_bvr_a = false; _is_dw_lf_down = false;} 
-			                          _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; *(*(_exm + 0) + 1) -= 1;} //escalation request prv-left + up / multi-tail s clearence
-																																											 //
-			if(!_exf && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) + 1] == '-') && !(*(*(_exm + 0) + 0) <= *(*(_exm + 1) + 0))) {(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'); 
-				                    *(*(_exm + 0) + 0) -= 1; _exfoliate = true;}
+     if(_mvbl->flg_disable_prem_r && (!(_grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1) - 1] != '-')) && _mvbl->_trv_exf) {  *(*(_mvbl->_coord + 0) + 0) += 1;} //determination of multi-tail flag for lprv + up
+      if(_cmp_str(_mvbl->_prv_direction, "L") && _mvbl->_trv_exf && !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] != '-') && 
+		      (!(*(*(_mvbl->_coord + 0) + 0) < *(*(_mvbl->_coord + 1) + 0)) || !(*(*(_mvbl->_coord + 0) + 0) > *(*(_mvbl->_coord + 1 ) + 0)))) { 
+                _mvbl->flg_state_of_row_indicator = true; 
+	   if(_mvbl->flg_disable_prem_r) {_mvbl->flg_disable_prem_r = false; _mvbl->flg_state_of_mlt_r = false;} 	
+		 _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; 
+		 *(*(_mvbl->_coord + 0) + 1) -= 1;} //escalation request prv-left + up /										 multi-tail s clearence											
+																				
+		
+	if(!(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] != '-') && _cmp_str(_mvbl->_prv_direction, "L") && !(*(*(_mvbl->_coord + 0) + 0) < *(*(_mvbl->_coord + 1) + 0))) 
+	                             { _mvbl->flg_state_of_mlt_r = false;}
 			
-			if (!_exf && !_exfoliate && !(_DECOR_[*(*(_exm + 0) + 0) + 1][*(*(_exm + 0) + 1)] != '-') && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] == '-') ) {*(*(_exm + 0) + 0) += 1;_traversed = true;}
-                        if(! _exfoliate && !_traversed && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] != '-') && !(_DECOR_[*(*(_exm + 0) + 0) + 1][*(*(_exm + 0) + 1)] != '-')) {_traversed_dig = true; }
-			
-			_DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1) += 1] = '-';
 
-			if(!(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] != '-') && _dir_prv == "L" && !(*(*(_exm + 0) + 0) < *(*(_exm + 1) + 0))) {_is_dw_lf_down = false;}
-			if(!(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] != '-') && _dir_prv == "L" && !_is_rowized && !_is_dw_lf_down) {
-			                 if(_bvr_a) {_bvr_a = false; _is_dw_lf_down = false; *(*(_exm + 0) + 0) += 1;} 
-			                         _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*';*(*(_exm + 0) + 0) -= 1; _dw_l_r = true;}
+	 if(!(_grid[*(*(_mvbl->_coord + 0) + 0) - 1][*(*(_mvbl->_coord + 0) + 1)] != '-') && _cmp_str(_mvbl->_prv_direction, "L") && _mvbl->flg_state_of_row_indicator && !_mvbl->flg_state_of_mlt_r && !_trv_r_non_dyn) { 
+		    if(_mvbl->flg_disable_prem_r) {_mvbl->flg_disable_prem_r = false; _mvbl->flg_state_of_mlt_r = false; *(*(_mvbl->_coord + 0) + 0) += 1;} 
+				   _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*';*(*(_mvbl->_coord + 0) + 0) -= 1; _dw_l_r = true;}
+					
+																						
+		
+	if(!_dw_l_r && !_mvbl->_trv_exf && !_trv_r_non_dyn && !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) + 1] == '-') && !(*(*(_mvbl->_coord + 0) + 0) <= *(*(_mvbl->_coord + 1) + 0))) 
+                           {(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'); *(*(_mvbl->_coord + 0) + 0) -= 1; _exfoliate = true;}
 			
-			if(!_traversed_dig && _traversed) { _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] = '*'; _traversed = false;} 
-			else { 
-				     if((!_exfoliate && !_exf) || (_is_dw_lf_down && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] == '-'))) 
-				          {if (_bvr_a && _is_dw_lf_down) {_bvr_a = false;}_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; 
-			                      if(!_traversed_dig && !_exf) *(*(_exm + 0) + 1) += 1; 
-			                            else { *(*(_exm + 0) + 0) += 1; _traversed_dig = false;  }  } } //dw traversion l prv/r prv supported
+
+	if (!_mvbl->_trv_exf && !_exfoliate && !(_grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1)] != '-') && !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] == '-')  && 
+					          !_trv_r_non_dyn) {*(*(_mvbl->_coord + 0) + 0) += 1;_traversed = true;}
+       
+	if(! _exfoliate && !_traversed && !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] != '-') && !(_grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1)] != '-')) 
+			              {_traversed_dig = true; } 
+
+
+       _grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) += 1] = '-';
+		
+	if(!_traversed_dig && _traversed) { _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] = '*'; _traversed = false;} 
+	else { 
+	  if(!_trv_r_non_dyn && !_dw_l_r && ((!_exfoliate && !_mvbl->flg_state_of_row_indicator) || (_mvbl->flg_state_of_mlt_r && 
+                          !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] == '-')) || 
+                           (_cmp_str(_mvbl->_prv_direction, "L") && _grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1)] == '-' && !_mvbl->flg_state_of_row_indicator)))
+				 {if (_mvbl->flg_disable_prem_r	 && _mvbl->flg_state_of_mlt_r && !_trv_r_non_dyn)  
+				        {_mvbl->flg_disable_prem_r = false;}
+                                        _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; 
+			                      if(!_traversed_dig) { *(*(_mvbl->_coord + 0) + 1) += 1; } 
+                                   else { *(*(_mvbl->_coord + 0) + 0) += 1; _traversed_dig = false;}  } } //dw traversion l prv/r prv supported
+
 																																//TODO l prv-dw without top-clearence mend the undefined immediate overriding of a recently modified cell
-     	                if(_is_dw_lf_down && !(_dir_prv != "L") && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] != '-')) {_bvr_a = false; _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; *(*(_exm + 0) + 1) -= 1;} //top-clearance for prv left/dw request
-			
-	                if ((!_is_rowized && _exf && _dir_prv == "L" && !(*(*(_exm + 0) + 0) != *(*(_exm + 1) + 0)))) {_exf = false; _is_dw_lf_down = false; _trv_b = false;} 
+     	
+	if(_mvbl->flg_state_of_mlt_r && _cmp_str(_mvbl->_prv_direction, "L") && !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] != '-') && !_trv_r_non_dyn) 
+			         {_mvbl->flg_disable_prem_r = false; _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) -= 1;} //to
 
+	for (size_t a = 0; a < 20; ++a) {
+		printf("\n");
+	}
+	
+	_buff_render(_grid);
+
+       return true;
+}
+
+
+extern _bool_ _trv_clb_l(struct _MOVEABLE_* _mvbl, char16 _grid[12][24]) {
+        
+	    
+ if(_mvbl->_trv_exf && _cmp_str(_mvbl->_direction, "R")) {size_t _tmp = *(*(_mvbl->_coord + 0) + 1); size_t _ftr = *(*(_mvbl->_coord + 0) + 0); 
+                *(*(_mvbl->_coord + 0) + 1) = *(*(_mvbl->_coord + 1) + 1); 
+             *(*(_mvbl->_coord + 1) + 1) = _tmp; *(*(_mvbl->_coord + 0) + 0) = *(*(_mvbl->_coord + 1) + 0); *(*(_mvbl->_coord + 1) + 0) = _ftr; _mvbl->_trv_exf = false;}
+
+ if(!_mvbl->_trv_exf && _cmp_str(_mvbl->_direction, "R")) {_mvbl->_prv_direction = _mvbl->_direction; 
+          _mvbl->_trv_exf = true; _mvbl->flg_state_of_mlt_r = false; _mvbl->flg_disable_prem_r = false;} //re-synchronize to falsity prior to directional switch
+
+ _mvbl->_direction = "L";
+			
+      
+			//add directional-support
+    if((!((*(*(_mvbl->_coord + 0) + 1)) <= 0)) && !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] != 'X')) {
+
+            _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) -= 1] = '-';
+            printf("%d",*(*(_mvbl->_coord + 0) + 1));
+            _grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '-'; 
+	    system("CLS");
+            for (size_t a = 0; a < 20; ++a) {
+		 printf("\n");
+             }
+         _buff_render(_grid);
+				
+	 return false;
+    }
+
+
+      system("CLS");
+	
+	bool _ltr_f = false;
+	bool _trv_tp_clr_rprv = false;
+	bool _trv_ac_fw = true;
+
+		_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) -= 1] = '-';
+    if(!(*(*(_mvbl->_coord + 1) + 0) != *(*(_mvbl->_coord + 0) + 0)) && !_trv_tp_clr_rprv && (_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) - 1] == '-')) 
+             {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) -= 1; _trv_tp_clr_rprv = true;}
+		 
+		//top-l collection
+		//TODO redo to accommodate for row-order-independent traversion
+	else if(!(*(*(_mvbl->_coord + 1) + 0) > *(*(_mvbl->_coord + 0) + 0)) && (_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) - 1] == '-')) 
+		             {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) -= 1; _ltr_f = true;}
+		//top-dw
+	else if((_grid[*(*(_mvbl->_coord + 1) + 0) + 1][*(*(_mvbl->_coord + 1) + 1)] == '-') && !_ltr_f) {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 0) += 1; _trv_ac_fw = true;}
+		//dw-top
+	else if((_grid[*(*(_mvbl->_coord + 1) + 0) - 1][*(*(_mvbl->_coord + 1) + 1)] == '-') && !_ltr_f) {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 0) -= 1;} 
+		//top-r collection
+        else if(!(*(*(_mvbl->_coord + 1) + 0) > *(*(_mvbl->_coord + 0) + 0)) && (_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) + 1] == '-') && !_ltr_f) 
+		                {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) += 1;}
+		//dw-r
+        else if(!(*(*(_mvbl->_coord + 1) + 0) < *(*(_mvbl->_coord + 0) + 0)) && (_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) + 1] == '-') && !_ltr_f) 
+		               {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) += 1;}
+		//dw-l
+        else if(!(*(*(_mvbl->_coord + 1) + 0) < *(*(_mvbl->_coord + 0) + 0)) && (_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) - 1] == '-') && !_ltr_f) 
+		               {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) -= 1;}
+		//dw-top/root exc
+        else if(!(*(*(_mvbl->_coord + 1) + 0) < *(*(_mvbl->_coord + 0) + 0)) && !_trv_ac_fw && (_grid[*(*(_mvbl->_coord + 1) + 0) + 1][*(*(_mvbl->_coord + 1) + 1)] == '-')) 
+		               {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 0) += 1;}
+      
+	for (size_t a = 0; a < 20; ++a) {
+		printf("\n");
+	}
+      //ProgramData_traversed_b = false;
+			//printf("\t\t\t\t\t\t    %s%s\n\n\n", _exclaimed_, _decor); printf("%s", _reset_);
+
+	_buff_render(_grid);
+       return true;
+
+}
+
+extern _bool_ __attribute__((no_inline)) _trv_clb_d(struct _MOVEABLE_* _mvbl, char16 _grid[12][24]) {
+
+	   if ((!(_grid[*(*(_mvbl->_coord + 1) + 0) + 1][*(*(_mvbl->_coord + 1) + 1)] != 'X') && _cmp_str(_mvbl->_direction, "R")) || 
+				             (!(_grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1)] != 'X') && _cmp_str(_mvbl->_direction, "L"))){
+				
+			  
+	      switch(_cmp_str(_mvbl->_direction, "R")) {
+
+                      case 0:
+                          _grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '-';
+                          _grid[*(*(_mvbl->_coord + 0) + 0) += 1][*(*(_mvbl->_coord + 0) + 1)] = '-';
+                      break;
+                      case 1:
+                           _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '-';
+                           _grid[*(*(_mvbl->_coord + 1) + 0) += 1][*(*(_mvbl->_coord + 1) + 1)] = '-';
+	               break;
+					 
+	    }			 
+	_reset_grid("CLS");
+	for (size_t a = 0; a < 20; ++a) {
+	   printf("\n");
+        }
+
+       	//printf("\t\t\t\t\t\t   %s%s\n\n\n", _exclaimed_, _decor); printf("%s", _reset_);
+			
+	_buff_render(_grid);
+
+    return false;
+
+       }
+
+			 _reset_grid("CLS");
+
+			bool _traversed_b = false;
+
+			//implement prv r/prv l request collection of multi-tail for
+			//tail - 1 (collection) / tail - 1(prv r)  (row-collection) or tail + 1 / tail - 1(prv l)
+			
+			if(_cmp_str(_mvbl->_direction, "R")) {
+
+				
+				//top-dw-l && dw-top-r
+				//TODO recollection from fluid points(dynamic exchange of preconditions)  
+  if(!(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) + 1] != '-') && !(*(*(_mvbl->_coord + 0) + 0) > *(*(_mvbl->_coord + 1) + 0))) 
+				               {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) += 1;}
+	else if(!(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] != '-' && !(*(*(_mvbl->_coord + 0) + 0) > *(*(_mvbl->_coord + 1) + 0)))) 
+				                {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) -= 1;}
+				//it dynamically adjusts to an altered(from the basis of how it's defined) context(i.e change the precondition to be dynamically determined by identifying the collection direction without utilizing coordinate comparison)
+				//comparison between incremented and current location to determine viable direction since collection context becomes progressively muddled 
+				//dw-top-l/r
+	else if(!(*(*(_mvbl->_coord + 0) + 0) < *(*(_mvbl->_coord + 1) + 0)) && !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) + 1] != '-')) 
+				                  {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) += 1;}
+	else if(!(*(*(_mvbl->_coord + 0) + 0) < *(*(_mvbl->_coord + 1) + 0)) && !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] != '-')) 
+				                  {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) -= 1;}
+        else if(!(_grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1)] != '-')) {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; 
+						 *(*(_mvbl->_coord + 0) + 0) += 1;}
+        
+       else if(!(_grid[*(*(_mvbl->_coord + 0) + 0) - 1][*(*(_mvbl->_coord + 0) + 1)] != '-')) {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; 
+					          *(*(_mvbl->_coord + 0) + 0) -= 1;}
+        _grid[*(*(_mvbl->_coord + 1) + 0) += 1][*(*(_mvbl->_coord + 1) + 1)] = '-'; }
+
+   else{ 
+			  				
+          if(!(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) + 1] != '-') && !(*(*(_mvbl->_coord + 1) + 0) > *(*(_mvbl->_coord + 0) + 0))) 
+				                {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) += 1;}
+	   else if(!(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) - 1] != '-' && !(*(*(_mvbl->_coord + 1) + 0) > *(*(_mvbl->_coord + 0) + 0)))) 
+				                {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) -= 1;}
+				//it dynamically adjusts to an altered(from the basis of how it's defined) context(i.e change the precondition to be dynamically determined by identifying the collection direction without utilizing coordinate comparison)
+				//comparison between incremented and current location to determine viable direction since collection context becomes progressively muddled 
+				//dw-top-l/r
+           else if(!(*(*(_mvbl->_coord + 1) + 0) < *(*(_mvbl->_coord + 0) + 0)) && !(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) + 1] != '-')) 
+				             {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) += 1;}
+	   else if(!(*(*(_mvbl->_coord + 1) + 0) < *(*(_mvbl->_coord + 0) + 0)) && !(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) - 1] != '-')) 
+				             {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) -= 1;}
+	   else if(!(_grid[*(*(_mvbl->_coord + 1) + 0) + 1][*(*(_mvbl->_coord + 1) + 1)] != '-')) {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 0) += 1;}
+        
+	   else if(!(_grid[*(*(_mvbl->_coord + 1) + 0) - 1][*(*(_mvbl->_coord + 1) + 1)] != '-')) {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 0) -= 1;}
+
+	      _grid[*(*(_mvbl->_coord + 0) + 0) += 1][*(*(_mvbl->_coord + 0) + 1)] = '-';}
+
+
+			//directional mis-coordination(tail-reduction flag facet present in line above)
+	for (size_t a = 0; a < 20; ++a) {
+		printf("\n");
+	}
+      //_traversed_b = false			
+				//printf("\t\t\t\t\t\t    %s%s\n\n\n", _exclaimed_, _decor); printf("%s", _reset_);
+			
+	_buff_render(_grid);
+		  //printf("%d %d %s", *(*(_mvbl->_coord + 0) + 0),*(*(_mvbl->_coord + 1) + 1) ,_mvbl->_direction);
+				
+	
+	return true;
+}
+
+extern _bool_ __attribute__((no_inline)) _trv_clb_u(struct _MOVEABLE_* _mvbl, char16 _grid[12][24]) {
+
+
+	
+	if((!(*(*(_mvbl->_coord + 1) + 0) < 0) && !(_grid[*(*(_mvbl->_coord + 1) + 0) - 1][*(*(_mvbl->_coord + 1) + 1)] != 'X') && _cmp_str(_mvbl->_direction, "R")) || 
+                    ((!(*(*(_mvbl->_coord + 0) + 0)) < 0) && !(_grid[*(*(_mvbl->_coord + 0) + 0) - 1][*(*(_mvbl->_coord + 0) + 1)] != 'X') && _cmp_str(_mvbl->_direction, "L")) 
+                         || ((!(*(*(_mvbl->_coord + 0) + 0)) < 0) && !(_grid[*(*(_mvbl->_coord + 1) + 0) - 1][*(*(_mvbl->_coord + 1) + 1)] != 'X') && _cmp_str(_mvbl->_direction, " "))) {
+			  
+				switch(_cmp_str(_mvbl->_direction, "R")) {
+
+					case 0:
+				              _grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '-';
+				               _grid[*(*(_mvbl->_coord + 1) + 0) -= 1][*(*(_mvbl->_coord + 1) + 1)] = '-';
+				              break;
+					case 1:
+				             _grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '-';
+				             _grid[*(*(_mvbl->_coord + 0) + 0) -= 1][*(*(_mvbl->_coord + 0) + 1)] = '-';
+				             break;
+				}
+
+				_reset_grid("CLS");
+				for (size_t a = 0; a < 20; ++a) {
+					printf("\n");
+				}
+				//printf("\t\t\t\t\t\t       %s%s\n\n\n", _exclaimed_, _defa); printf("%s", _reset_);
+				//srand(time(NULL));
+				//_grid[rand() % 10][rand() % 10] = 'X';	
+				_buff_render(_grid);
+				
+				return false; 
+			} 
+
+			
+			_reset_grid("CLS");
+			bool _traversed_b = true;
+			bool _trv_rg = false;
+			bool _trv_tp = false;	
+			bool _tpv_astr = false;
+			bool _trv_sw = false;
+
+
+
+  if (_mvbl->_direction == "R") {
+
+			//bottom clearance
+	  if(!(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] != '-') && !(_grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1)] == '-') && (!(_mvbl->_direction != "R") || _mvbl->_direction == "L")) 
+			       {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) -= 1; 
+				   _grid[*(*(_mvbl->_coord + 1) + 0) -= 1][*(*(_mvbl->_coord + 1) + 1)] = '-'; _trv_tp = true;}
+
+			//top cleareance l/r
+	  if(!(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) + 1] != '-') && !(_grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1)] == '-')) 
+			           {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) += 1; 
+				         _grid[*(*(_mvbl->_coord + 1) + 0) -= 1][*(*(_mvbl->_coord + 1) + 1)] = '-'; _trv_rg = true;}
+			
+	   else { 
+		   if(!(_grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1)] == '-') && !_trv_tp) {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; 
+				               *(*(_mvbl->_coord + 0) + 0) -= 1; _grid[*(*(_mvbl->_coord + 1) + 0) -= 1][*(*(_mvbl->_coord + 1) + 1)] = '-'; } _trv_sw = false;}
+			//prv r parallel wall clearance
+			if(!(_grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1)] != '-') && !_trv_rg) {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; 
+				                *(*(_mvbl->_coord + 0) + 0) += 1; _grid[*(*(_mvbl->_coord + 1) + 0) -= 1][*(*(_mvbl->_coord + 1) + 1)] = '-';} }
+     
+
+ else if (_cmp_str(_mvbl->_direction, "L")){
+          
+	     if(!(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) - 1] != '-') && !(_grid[*(*(_mvbl->_coord + 1) + 0) + 1][*(*(_mvbl->_coord + 1) + 1)] == '-')) 
+					             {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; 
+							         *(*(_mvbl->_coord + 1) + 1) -= 1; _grid[*(*(_mvbl->_coord + 0) + 0) -= 1][*(*(_mvbl->_coord + 0) + 1)] = '-'; _trv_tp = true;}
+
+			//top cleareance l/r
+	       if(!(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) + 1] != '-') && !(_grid[*(*(_mvbl->_coord + 1) + 0) + 1][*(*(_mvbl->_coord + 1) + 1)] == '-')) 
+					                  {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) += 1; 
+				                    _grid[*(*(_mvbl->_coord + 0) + 0) -= 1][*(*(_mvbl->_coord + 0) + 1)] = '-'; _trv_rg = true;}
+			
+	        else { 
+			if(!(_grid[*(*(_mvbl->_coord + 1) + 0) + 1][*(*(_mvbl->_coord + 1) + 1)] == '-') && !_trv_tp) {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 0) -= 1; 
+						                 _grid[*(*(_mvbl->_coord + 0) + 0) -= 1][*(*(_mvbl->_coord + 0) + 1)] = '-'; } _trv_sw = false;}
+			//prv r parallel wall clearance
+	         if(!(_grid[*(*(_mvbl->_coord + 1) + 0) + 1][*(*(_mvbl->_coord + 1) + 1)] != '-') && !_trv_rg && !_trv_tp) {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; 
+				                          *(*(_mvbl->_coord + 1) + 0) += 1; _grid[*(*(_mvbl->_coord + 0) + 0) -= 1][*(*(_mvbl->_coord + 0) + 1)] = '-';} }
+	  
+
+			//directional mis-coordination(tail-reduction flag facet present in line above)
 			for (size_t a = 0; a < 20; ++a) {
 				printf("\n");
 			}
+      //_traversed_b = false			
+				//printf("\t\t\t\t\t\t    %s%s\n\n\n", _exclaimed_, _decor); printf("%s", _reset_);
+			
+			_buff_render(_grid);
+		  //printf("%d %d %s", *(*(_mvbl->_coord + 0) + 0),*(*(_mvbl->_coord + 1) + 1) ,_mvbl->_direction);
 
-			 printf("\t\t\t\t\t\t    %s%s\n\n\n", _exclaimed_, _decor); printf("%s", _reset_);	
-			_buff_render(_DECOR_);
-			_direc_down = false;
+			return true;
 
 }
 
-extern void _trv_clb_l(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {
-  
-			if(!_exf) {_dir_prv = _dir_f; _exf = true;} //re-synchronize to falsity prior to directional switch
-			_dir_f = "L";
-			
-			//add directional-support
-                         if((!(*(*(_exm + 0) + 1)) <= 0) && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) - 1] != 'X')) {
-				    _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) -= 1] = '-';
-				    // printf("%d",*(*(_exm + 0) + 1));
-				     _DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1)] = '-'; 
-
-				   _tl++;
-				  system("CLS");
-				  for (size_t a = 0; a < 20; ++a) {
-					  printf("\n");
-			 	  }
-				  printf("\t\t\t\t\t\t       %s%s\n\n\n", _exclaimed_, _defa); printf("%s", _reset_);
-				//srand(time(NULL));
-				//_DECOR_[rand() % 10][rand() % 10] = 'X';	
-				  _buff_render(_DECOR_);
-				
-				continue; 
-			}
-
-
-                      system("CLS");
-
-			bool _traversed_l_d = false;
-			bool _trv_all = false;
-			bool _clr_tl_d = false;
-			bool _ltr_f = false;
-			bool _trv_tp_clr_rprv = false;
-			bool _trv_tp_clr_rprv_ldw = false;
-			bool _trv_tp_clr_row = false;
-			bool _trv_dw_prvl_row = false;
-			bool _trv_dw_rgl = false;
-
-			if(!(_DECOR_[*(*(_exm + 1) + 0) + 1][*(*(_exm + 1) + 1)] != '-') && !(*(*(_exm + 1) + 0) >= *(*(_exm + 0) + 0))) { _DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1)] = '*'; 
-				                              *(*(_exm + 1) + 0) += 1; _trv_dw_prvl_row = true;}
-			//prv l dw request top clearance
-			if(!(_DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1) - 1] != '-') && !(*(*(_exm + 1) + 0) >= *(*(_exm + 0) + 0))) {_DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1)] = '*';*(*(_exm + 1) + 1) -= 1; 
-				                              _trv_tp_clr_rprv_ldw = true;}
-
-			if(!(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) + 1] != '-') && !(_dir_prv != "R") && !(*(*(_exm + 0) + 0) >= *(*(_exm + 1) + 0))) {_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; 
-				                              *(*(_exm + 0) + 1) += 1; _trv_tp_clr_rprv = true;}  
-
-			if (!_trv_tp_clr_rprv && !_clr_tl_d && !(_DECOR_[*(*(_exm + 0) + 0) + 1][*(*(_exm + 0) + 1) - 1] != '-') && !(_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] != '-') && !(_dir_prv != "R")) {
-				                              _DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1) -= 1] = '-'; *(*(_exm + 0) + 0) += 1;
-							              _traversed_l_d = true;}//dynamic coordinate exchange
-      
-			if(!_clr_tl_d && !_traversed_l_d && (*(*(_exm + 0) + 0) == *(*(_exm + 1) + 0)) && !_trv_dw_prvl_row) {	_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) -= 1] = '-'; 
-			                 _DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1)] = '*';	*(*(_exm + 1) + 1) -= 1;  b++; _ecm = 0;} //regular L traversion
-			
-			else {if(!_clr_tl_d && !_traversed_l_d && !_trv_all && !_ltr_f) { { 
-				                        if(!_trv_tp_clr_rprv_ldw && !_trv_dw_prvl_row) _DECOR_[*(*(_exm + 1) + 0)][*(*(_exm + 1) + 1) -= 1] = '-'; 
-				                              else { _DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1) -= 1] = '-';} 
-						                      if(!_trv_tp_clr_rprv && !_trv_tp_clr_rprv_ldw && !_trv_dw_prvl_row) {_DECOR_[*(*(_exm + 0) + 0)][*(*(_exm + 0) + 1)] = '*'; 
-					                                                                 *(*(_exm + 0) + 0) += 1 ;c = 2000;} } } 
-			}
-			//prv R bottom traversion
-			if(_traversed_l_d)  { _DECOR_[*(*(_exm + 0) + 0) - 1][*(*(_exm + 0) + 1)] = '*'; _traversed_l_d = false; size_t _tm = *(*(_exm + 0) + 1); 
-				                       *(*(_exm + 0) + 1) = *(*(_exm + 1) + 1); *(*(_exm + 1) + 1) = _tm; }
-			 //actualized dynamic exchange
-																//
-		       for (size_t a = 0; a < 20; ++a) {
-				printf("\n");
-			}
-      //_traversed_b = false;
-			printf("\t\t\t\t\t\t    %s%s\n\n\n", _exclaimed_, _decor); printf("%s", _reset_);
-
-			_buff_render(_DECOR_); 
-
+extern void _deallocative_mbvl(struct _MOVEABLE_* _mbvl) {
+	_assert_(_mbvl != NULL);
+	_deallocative_(_mbvl->_coord);
 
 }
+extern _ptr_int32* __attribute__((malloc))_init_fld_coord() {
+	
+	_ptr_int32* _exm = (_ptr_int32*)_allocative_(sizeof(_ptr_int32) * 2);
+	for (size_t g = 0; g < 2; ++g) {
+		*(_exm + g) = (_ptr_int32)_allocative_(sizeof(int) * 2);
+		for (size_t a = 0; a < 2; ++a) {
+			*(*(_exm + g) + a) = 0;
+		}
+	}
 
-extern void _trv_clb_d(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {}
+	return &(*_exm);
+}
 
-extern void _trv_clb_u(struct _MOVEABLE_* _mvbl, char16 _grid[12][100]) {}
+extern void __attribute__((no_inline)) _mbvl_res(struct _MOVEABLE_* _moveb_) {
+		_moveb_->_coord = _init_fld_coord();
+		_moveb_->_direction = " ";
+		_moveb_->_prv_direction = " ";
+               _moveb_->_trv_exf = true;
+}
+
+extern struct _MOVEABLE_* __attribute__((malloc)) _init_mvbl() {   
+  struct _MOVEABLE_* _mvb_locale = (struct _MOVEABLE_*) _allocative_(sizeof(struct _MOVEABLE_)); 
+	_mbvl_res(_mvb_locale);
+	_pause_thread(200);
+	return _mvb_locale;
+}
