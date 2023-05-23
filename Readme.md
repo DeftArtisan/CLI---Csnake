@@ -6,5 +6,5 @@ Initially went for an intuitively overcomplicated approach knees deep for it be 
 
 
 <p align="center">
-  <img src="![2023-05-23_17-07-00__online-video-cutter_com__AdobeExpress](https://github.com/DeftArtisan/CLI---Csnake/assets/81402620/b49a8cbf-06b4-4c66-b323-2d012a5ee5ae)if" alt="animated" />
+  <img src="![2023-05-23_17-07-00__online-video-cutter_com__AdobeExpress](https://github.com/DeftArtisan/CLI---Csnake/assets/81402620/b49a8cbf-06b4-4c66-b323-2d012a5ee5ae)gif" alt="animated" />
 </p>
