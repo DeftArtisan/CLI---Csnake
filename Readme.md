@@ -6,4 +6,4 @@ Initially went for an intuitively overcomplicated approach knees deep for it be 
 The snake's growth is simulated through consecutive invisible collectibles in the example for convenience.
 
 
-![2023-05-23_17-07-00__online-video-cutter_com__AdobeExpress](https://github.com/DeftArtisan/CLI---Csnake/assets/81402620/ea46f744-3ce4-4f7e-a1ad-85f783012940)
+![2023-05-24_17-31-03__online-video-cutter_com__AdobeExpress](https://github.com/DeftArtisan/CLI---Csnake/assets/81402620/1af42f82-b24b-476f-8ae9-27e85aa3d350)
