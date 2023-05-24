@@ -25,9 +25,9 @@ extern void buff_render(char16 _grid[12][100]){
 	_res_curs_pos(0, 0); 
 
 	for (size_t g = 0; g < 12; ++g) {
-		 for (size_t b = 0; b < 6; ++b) {
-		     for (size_t a = 0; b >= 5 && a < 24; ++a) {	
-			  if(_grid[g][a] == '-' || g == 0 || g == 11 || a == 23 || a == 0){  
+	     for (size_t b = 0; b < 6; ++b) {
+		  for (size_t a = 0; b >= 5 && a < 24; ++a) {	
+			if(_grid[g][a] == '-' || g == 0 || g == 11 || a == 23 || a == 0){  
 			      if(_grid[g][a] == '-') {printf("%s", _actorPL);}
 				   printf("%c", _grid[g][a]);
 				   printf("%s", _reset_);
@@ -40,8 +40,8 @@ extern void buff_render(char16 _grid[12][100]){
                      _sep:
                         if (a >= 23) {
                            printf("\n");
-							}
-			}
+		       }
+		 }
 	   }
      }
 
