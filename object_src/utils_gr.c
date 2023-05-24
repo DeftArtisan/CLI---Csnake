@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include "definitive.h"
 
-#define _BUFF_REND(MVGR, MV, GR)	(memcpy(MVGR, GR, 12 * 100), _buffer_db(MV, GR), _hd_buff_crs(), buff_render(GR))
- 
+#define _BUFF_REND(MVGR, MV, GR) (memcpy(MVGR, GR, 12 * 100), _buffer_db(MV, GR), _hd_buff_crs(), buff_render(GR))
 
 
 extern void _res_curs_pos(int _vr, int _vrr) {
