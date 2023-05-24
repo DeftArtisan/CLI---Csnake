@@ -1,32 +1,6 @@
 #include <stdio.h>
 #include "moveable.h"
-
-
-extern void _buff_render(char16 _grid[12][24]){
-	for (size_t g = 0; g < 12; ++g) {
-		 for (size_t b = 0; b < 6; ++b) {
-		     printf("\t");
-			for (size_t a = 0; b >= 5 && a < 24; ++a) {	
-			    if(_grid[g][a] == '-' || g == 0 || g == 11 || a == 23 || a == 0){  
-				  if(_grid[g][a] == '-') {printf("%s", _actorPL);}
-					printf("%c", _grid[g][a]);
-					printf("%s", _reset_);
-					if (a == 23)
-					     goto _sep;
-					continue;
-				   }
-							
-						 printf(" ");
-                                    _sep:
-				        if (a >= 23) {
-					   printf("\n");
-				        }
-							
-				    }
-			  }
-		}
-
-}
+#include "util_gr"
 
 extern void __attribute__((no_inline)) _traversion( struct _MOVEABLE_* _mbvl, const size_t seed, char16 _grid[12][24]) { 
 	  _assert_(_mbvl != NULL);
