@@ -1,7 +1,7 @@
 
 A single-threaded ASCI re-imagining of a classic implemented using C.
 
-Initially went for an intuitively overcomplicated approach knees deep for it be refactored in a time compensating for opting for the time-beneficial other approach.
+Initially went for an intuitively overcomplicated approach knees deep for it be refactored in a time compensating for not opting for the time-beneficial other approach.
 
 The snake's growth is simulated through consecutive invisible collectibles in the example for convenience.
 
