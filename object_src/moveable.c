@@ -288,55 +288,87 @@ extern _bool_ __attribute__((no_inline)) _trv_clb_d(struct _MOVEABLE_* _mvbl, ch
 
        }
 
-			 _reset_grid("CLS");
+        _reset_grid("CLS");
 
-			bool _traversed_b = false;
+	bool _traversed_b = false;
 
-			//implement prv r/prv l request collection of multi-tail for
-			//tail - 1 (collection) / tail - 1(prv r)  (row-collection) or tail + 1 / tail - 1(prv l)
+	 //implement prv r/prv l request collection of multi-tail for
+	 //tail - 1 (collection) / tail - 1(prv r)  (row-collection) or tail + 1 / tail - 1(prv l)
 			
-			if(_cmp_str(_mvbl->_direction, "R")) {
+if(_cmp_str(_mvbl->_direction, "R")) {
 
 				
-				//top-dw-l && dw-top-r
-				//TODO recollection from fluid points(dynamic exchange of preconditions)  
-  if(!(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) + 1] != '-') && !(*(*(_mvbl->_coord + 0) + 0) > *(*(_mvbl->_coord + 1) + 0))) 
-				               {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) += 1;}
-	else if(!(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] != '-' && !(*(*(_mvbl->_coord + 0) + 0) > *(*(_mvbl->_coord + 1) + 0)))) 
-				                {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) -= 1;}
-				//it dynamically adjusts to an altered(from the basis of how it's defined) context(i.e change the precondition to be dynamically determined by identifying the collection direction without utilizing coordinate comparison)
-				//comparison between incremented and current location to determine viable direction since collection context becomes progressively muddled 
-				//dw-top-l/r
-	else if(!(*(*(_mvbl->_coord + 0) + 0) < *(*(_mvbl->_coord + 1) + 0)) && !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) + 1] != '-')) 
-				                  {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) += 1;}
-	else if(!(*(*(_mvbl->_coord + 0) + 0) < *(*(_mvbl->_coord + 1) + 0)) && !(_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1) - 1] != '-')) 
-				                  {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; *(*(_mvbl->_coord + 0) + 1) -= 1;}
-        else if(!(_grid[*(*(_mvbl->_coord + 0) + 0) + 1][*(*(_mvbl->_coord + 0) + 1)] != '-')) {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; 
-						 *(*(_mvbl->_coord + 0) + 0) += 1;}
-        
-       else if(!(_grid[*(*(_mvbl->_coord + 0) + 0) - 1][*(*(_mvbl->_coord + 0) + 1)] != '-')) {_grid[*(*(_mvbl->_coord + 0) + 0)][*(*(_mvbl->_coord + 0) + 1)] = '*'; 
-					          *(*(_mvbl->_coord + 0) + 0) -= 1;}
-        _grid[*(*(_mvbl->_coord + 1) + 0) += 1][*(*(_mvbl->_coord + 1) + 1)] = '-'; }
+			//top-dw-l && dw-top-r
+			//TODO recollection from fluid points(dynamic exchange of preconditions)  
 
-   else{ 
-			  				
-          if(!(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) + 1] != '-') && !(*(*(_mvbl->_coord + 1) + 0) > *(*(_mvbl->_coord + 0) + 0))) 
-				                {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) += 1;}
-	   else if(!(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) - 1] != '-' && !(*(*(_mvbl->_coord + 1) + 0) > *(*(_mvbl->_coord + 0) + 0)))) 
-				                {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) -= 1;}
-				//it dynamically adjusts to an altered(from the basis of how it's defined) context(i.e change the precondition to be dynamically determined by identifying the collection direction without utilizing coordinate comparison)
-				//comparison between incremented and current location to determine viable direction since collection context becomes progressively muddled 
-				//dw-top-l/r
-           else if(!(*(*(_mvbl->_coord + 1) + 0) < *(*(_mvbl->_coord + 0) + 0)) && !(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) + 1] != '-')) 
-				             {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) += 1;}
-	   else if(!(*(*(_mvbl->_coord + 1) + 0) < *(*(_mvbl->_coord + 0) + 0)) && !(_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1) - 1] != '-')) 
-				             {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 1) -= 1;}
-	   else if(!(_grid[*(*(_mvbl->_coord + 1) + 0) + 1][*(*(_mvbl->_coord + 1) + 1)] != '-')) {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 0) += 1;}
-        
-	   else if(!(_grid[*(*(_mvbl->_coord + 1) + 0) - 1][*(*(_mvbl->_coord + 1) + 1)] != '-')) {_grid[*(*(_mvbl->_coord + 1) + 0)][*(*(_mvbl->_coord + 1) + 1)] = '*'; *(*(_mvbl->_coord + 1) + 0) -= 1;}
+if (_mvbl->flg_disable_prem_r && (!(_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1] - 1] != '-')) && !(_grid[_mvbl->_coord[0][0] + 1][_mvbl->_coord[0][1]] == '-') &&
+        (!(_mvbl->_direction != "R") || _mvbl->_direction == "L")) {
+    _grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*';
+    _mvbl->_coord[0][1] -= 1;
+    _grid[_mvbl->_coord[1][0] - 1][_mvbl->_coord[1][1]] = '-';
+    _trv_tp = true;
+}
 
-	      _grid[*(*(_mvbl->_coord + 0) + 0) += 1][*(*(_mvbl->_coord + 0) + 1)] = '-';}
-
+//top clearance l/r
+if (!(_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1] + 1] != '-') && !(*(_mvbl->_coord[0][0]) > *(_mvbl->_coord[1][0]))) {
+    _grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*';
+    _mvbl->_coord[0][1] += 1;
+}
+else if (!(_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1] - 1] != '-') && !(*(_mvbl->_coord[0][0]) > *(_mvbl->_coord[1][0]))) {
+    _grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*';
+    _mvbl->_coord[0][1] -= 1;
+}
+//it dynamically adjusts to an altered(from the basis of how it's defined) context(i.e change the precondition to be dynamically determined by identifying the collection direction without utilizing coordinate comparison)
+//comparison between incremented and current location to determine viable direction since collection context becomes progressively muddled
+//dw-top-l/r
+else if (!(*(_mvbl->_coord[0][0]) < *(_mvbl->_coord[1][0])) && !(_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1] + 1] != '-')) {
+    _grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*';
+    _mvbl->_coord[0][1] += 1;
+}
+else if (!(*(_mvbl->_coord[0][0]) < *(_mvbl->_coord[1][0])) && !(_grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1] - 1] != '-')) {
+    _grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*';
+    _mvbl->_coord[0][1] -= 1;
+}
+else if (!(_grid[_mvbl->_coord[0][0] + 1][_mvbl->_coord[0][1]] != '-')) {
+    _grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*';
+    _mvbl->_coord[0][0] += 1;
+}
+else if (!(_grid[_mvbl->_coord[0][0] - 1][_mvbl->_coord[0][1]] != '-')) {
+    _grid[_mvbl->_coord[0][0]][_mvbl->_coord[0][1]] = '*';
+    _mvbl->_coord[0][0] -= 1;
+}
+_grid[_mvbl->_coord[1][0] + 1][_mvbl->_coord[1][1]] = '-';
+}
+else {
+    if (!(_grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1] + 1] != '-') && !(*(_mvbl->_coord[1][0]) > *(_mvbl->_coord[0][0]))) {
+        _grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1]] = '*';
+        _mvbl->_coord[1][1] += 1;
+    }
+    else if (!(_grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1] - 1] != '-') && !(*(_mvbl->_coord[1][0]) > *(_mvbl->_coord[0][0]))) {
+        _grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1]] = '*';
+        _mvbl->_coord[1][1] -= 1;
+    }
+    //it dynamically adjusts to an altered(from the basis of how it's defined) context(i.e change the precondition to be dynamically determined by identifying the collection direction without utilizing coordinate comparison)
+    //comparison between incremented and current location to determine viable direction since collection context becomes progressively muddled
+    //dw-top-l/r
+    else if (!(*(_mvbl->_coord[1][0]) < *(_mvbl->_coord[0][0])) && !(_grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1] + 1] != '-')) {
+        _grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1]] = '*';
+        _mvbl->_coord[1][1] += 1;
+    }
+    else if (!(*(_mvbl->_coord[1][0]) < *(_mvbl->_coord[0][0])) && !(_grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1] - 1] != '-')) {
+        _grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1]] = '*';
+        _mvbl->_coord[1][1] -= 1;
+    }
+    else if (!(_grid[_mvbl->_coord[1][0] + 1][_mvbl->_coord[1][1]] != '-')) {
+        _grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1]] = '*';
+        _mvbl->_coord[1][0] += 1;
+    }
+    else if (!(_grid[_mvbl->_coord[1][0] - 1][_mvbl->_coord[1][1]] != '-')) {
+        _grid[_mvbl->_coord[1][0]][_mvbl->_coord[1][1]] = '*';
+        _mvbl->_coord[1][0] -= 1;
+    }
+    _grid[_mvbl->_coord[0][0] + 1][_mvbl->_coord[0][1]] = '-';
+}
 
 			//directional mis-coordination(tail-reduction flag facet present in line above)
 	for (size_t a = 0; a < 20; ++a) {
